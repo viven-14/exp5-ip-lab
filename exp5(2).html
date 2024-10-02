@@ -1,0 +1,69 @@
+<html>
+<head>
+  <title>Custom Iterator</title>
+</head>
+<body>
+  <h1>Custom Iterator for Square of Numbers</h1>
+  
+  <form id="numberForm">
+    <label for="numbers">Enter numbers separated by commas:</label>
+    <input type="text" id="numbers" name="numbers" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>Squared Results:</h2>
+  <ul id="results"></ul>
+
+  <script>
+    class SquaredIterator {
+      constructor(numbers) {
+        this.numbers = numbers;
+        this.index = 0;
+      }
+
+      next() {
+        if (this.index < this.numbers.length) {
+
+          const square = this.numbers[this.index] ** 2;
+
+          this.index++;
+          
+          return { value: square, done: false };
+        } else {
+
+          return { value: undefined, done: true };
+        }
+      }
+
+      return() {
+        return { value: undefined, done: true };
+      }
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault(); 
+      const inputField = document.getElementById('numbers');
+      const input = inputField.value;
+
+      const numbers = input.split(',')
+        .map(num => parseFloat(num.trim()))
+        .filter(num => !isNaN(num));
+
+      const iterator = new SquaredIterator(numbers);
+
+      const resultsList = document.getElementById('results');
+      resultsList.innerHTML = ''; 
+
+      let result = iterator.next();
+      while (!result.done) {
+        const listItem = document.createElement('li');
+        listItem.textContent = result.value;
+        resultsList.appendChild(listItem);
+        result = iterator.next();
+      }
+    }
+
+    document.getElementById('numberForm').addEventListener('submit', handleFormSubmit);
+  </script>
+</body>
+</html>
